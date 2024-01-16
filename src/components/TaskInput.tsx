@@ -1,21 +1,26 @@
 import { AddCircleOutlined } from "@mui/icons-material";
 import { Box, IconButton, InputBase, Paper } from "@mui/material";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { LOCAL_STORAGE_KEY } from "../App";
 
 interface TasksInputProps {
 	tasks: string[];
 	setTasks: Dispatch<SetStateAction<string[]>>;
-} 
+}
 
 const TaskInput: FC<TasksInputProps> = (props) => {
-	const {tasks, setTasks} = props;
-	
+	const { tasks, setTasks } = props;
+
 	const [newTask, setNewTask] = useState<string>('');
 
 	const createNewTaskHandler = () => {
 		setTasks([...tasks, newTask]);
 		setNewTask('')
 	}
+
+	useEffect(() => {
+		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks));
+	}, [tasks]);
 
 	return (
 		<Box sx={{ marginBottom: '1rem' }}>
