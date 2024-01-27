@@ -34,10 +34,16 @@ const Tasks: FC<TasksProps> = (props) => {
 						justifyContent: 'space-between',
 						alignItems: 'center',
 						width: 400,
-						marginBottom: '1rem'
+						marginBottom: '1rem',
 					}}
 					>
-						<Typography sx={{ cursor: 'default', padding: '0.5rem' }}>
+						<Typography sx={{
+							cursor: 'default',
+							padding: '0.5rem',
+							textDecoration: task.isCompleted ? 'line-through' : 'none',
+							opacity: task.isCompleted ? 0.35 : 1
+						}}
+						>
 							{task.description}
 						</Typography>
 						<Box sx={{
