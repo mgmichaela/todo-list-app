@@ -1,32 +1,21 @@
 import { AddCircleOutlined } from "@mui/icons-material";
 import { Box, IconButton, InputBase, Paper } from "@mui/material";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { LOCAL_STORAGE_KEY } from "../App";
+import { Dispatch, FC, SetStateAction, useEffect } from "react";
+import { LOCAL_STORAGE_KEY, Task } from "../App";
 import ErrorMessage from "./ErrorMessage";
+import { v4 as uuidv4 } from 'uuid';
 
 interface TasksInputProps {
-	tasks: string[];
-	setTasks: Dispatch<SetStateAction<string[]>>;
+	tasks: Task[];
+	showErrorMessage: boolean;
+	newTask: Task;
+	setNewTask: Dispatch<SetStateAction<Task>>;
+	keyDownHandler: (e: any) => void;
+	addTaskHandler: () => void;
 }
 
 const TaskInput: FC<TasksInputProps> = (props) => {
-	const { tasks, setTasks } = props;
-
-	const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
-	const [newTask, setNewTask] = useState<string>('');
-
-	const createNewTaskHandler = () => {
-		if (!newTask) {
-			setShowErrorMessage(true);
-
-			setTimeout(() => {
-				setShowErrorMessage(false);
-			}, 3000);
-			return
-		}
-		setTasks([...tasks, newTask]);
-		setNewTask('')
-	}
+	const { tasks, showErrorMessage, newTask, setNewTask, keyDownHandler, addTaskHandler } = props;
 
 	useEffect(() => {
 		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks));
@@ -34,7 +23,7 @@ const TaskInput: FC<TasksInputProps> = (props) => {
 
 	return (
 		<>
-			<Box sx={{ marginTop: '3.5rem', position: "absolute", top: 0, zIndex: 999  }}>
+			<Box sx={{ marginTop: '3.5rem', position: "absolute", top: 0, zIndex: 999 }}>
 				{showErrorMessage && <ErrorMessage />}
 			</Box>
 			<Box sx={{ marginBottom: '1rem', paddingTop: '4rem' }}>
@@ -49,13 +38,15 @@ const TaskInput: FC<TasksInputProps> = (props) => {
 					<InputBase
 						sx={{ ml: 1, flex: 1 }}
 						placeholder="Add new task"
-						value={newTask}
-						onChange={(e) => setNewTask(e.target.value)}
+						value={newTask.description}
+						onChange={(e) => setNewTask({ description: e.target.value, id: uuidv4(), isCompleted: false })}
+						onKeyDown={keyDownHandler}
+						tabIndex={0}
 					/>
 					<IconButton
 						color="inherit"
 						sx={{ p: '10px' }}
-						onClick={() => createNewTaskHandler()}
+						onClick={addTaskHandler}
 					>
 						<AddCircleOutlined />
 					</IconButton>
