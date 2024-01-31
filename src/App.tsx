@@ -37,16 +37,7 @@ const App: FC = () => {
   }
 
   const keyDownHandler = (e: any) => {
-    if (!newTask.description) {
-      setShowErrorMessage(true);
-
-      setTimeout(() => {
-        setShowErrorMessage(false);
-      }, 3000);
-      return
-    }
-
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && newTask.description) {
       createNewTaskHandler();
     }
   }
