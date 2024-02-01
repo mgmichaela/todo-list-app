@@ -1,9 +1,10 @@
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import TaskInput from './components/TaskInput';
 import { Box, Typography } from '@mui/material';
 import Tasks from './components/Tasks';
 
 export const LOCAL_STORAGE_KEY = "tasks";
+const ENTER_KEY = "Enter";
 
 export interface Task {
   description: string;
@@ -37,7 +38,7 @@ const App: FC = () => {
   }
 
   const keyDownHandler = (e: any) => {
-    if (e.key === "Enter" && newTask.description) {
+    if (e.key === ENTER_KEY && newTask.description) {
       createNewTaskHandler();
     }
   }
@@ -48,7 +49,8 @@ const App: FC = () => {
       justifyContent: "center",
       alignItems: "center",
       flexDirection: 'column'
-    }}>
+    }}
+    >
       <Typography variant='h3'>To-do</Typography>
       <TaskInput
         tasks={tasks}
