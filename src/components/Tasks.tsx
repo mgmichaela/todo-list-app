@@ -1,5 +1,5 @@
 import { Close, DeleteForever, Edit, Save } from "@mui/icons-material";
-import { Box, Checkbox, Divider, IconButton, Paper, TextField, Typography } from "@mui/material";
+import { Box, Checkbox, Container, Divider, Grid, IconButton, Paper, TextField, Typography } from "@mui/material";
 import { Dispatch, FC, SetStateAction, useState } from "react"
 import { Task } from "../App";
 
@@ -56,101 +56,111 @@ const Tasks: FC<TasksProps> = (props) => {
 	}
 
 	return (
-		<>
+		<Container>
 			{tasks.map((task) => (
-				<Box key={task.id}>
-					<Paper sx={{
-						p: '2px 4px',
+				<Grid
+					container
+					sx={{
 						display: 'flex',
-						justifyContent: 'space-between',
-						alignItems: 'center',
-						width: 400,
-						wordBreak: 'break-all',
-						marginBottom: '1rem',
-						backgroundColor: editedTask === task.id || hoveredTask === task.id
-							? '#f3f7ff'
-							: '#fff',
-					}}
-						onMouseOver={() => handleMouseOver(task.id)}
-						onMouseOut={handleMouseOut}
-					>
-						{editedTask === task.id ? (
-							<TextField
-								value={newValue}
-								onChange={(e) => setNewValue(e.target.value)}
-								sx={{ "& fieldset": { border: 'none' } }}
-							/>
-						) : (
-							<Typography sx={{
-								cursor: 'default',
-								padding: '0.5rem',
-								textDecoration: task.isCompleted
-									? 'line-through'
-									: 'none',
-								opacity: task.isCompleted
-									? 0.35
-									: 1
+						justifyContent: 'center'
+					}}>
+					<Grid
+						item
+						xs={12}
+						md={6}
+						key={task.id}>
+						<Paper sx={{
+							p: '2px 4px',
+							display: 'flex',
+							justifyContent: 'space-between',
+							alignItems: 'center',
+							wordBreak: 'break-all',
+							marginBottom: '1rem',
+							backgroundColor: editedTask === task.id || hoveredTask === task.id
+								? '#f3f7ff'
+								: '#fff',
+						}}
+							onMouseOver={() => handleMouseOver(task.id)}
+							onMouseOut={handleMouseOut}
+						>
+							{editedTask === task.id ? (
+								<TextField
+									value={newValue}
+									onChange={(e) => setNewValue(e.target.value)}
+									sx={{ "& fieldset": { border: 'none' } }}
+								/>
+							) : (
+								<Typography sx={{
+									cursor: 'default',
+									padding: '0.5rem',
+									textDecoration: task.isCompleted
+										? 'line-through'
+										: 'none',
+									opacity: task.isCompleted
+										? 0.35
+										: 1
+								}}
+								>
+									{task.description}
+								</Typography>
+							)}
+							<Box sx={{
+								display: 'flex',
+								alignItems: 'center',
+								textAlign: 'right'
 							}}
 							>
-								{task.description}
-							</Typography>
-						)}
-						<Box sx={{
-							display: 'flex',
-							alignItems: 'center',
-							textAlign: 'right'
-						}}
-						>
-							{task.isCompleted === false
-								&& (editedTask !== task.id && hoveredTask === task.id)
-								&& (
+								{task.isCompleted === false
+									&& (editedTask !== task.id && hoveredTask === task.id)
+									&& (
+										<>
+											<IconButton
+												color="inherit"
+												sx={{ p: '10px' }}
+												onClick={() => handleEditToggle(task.id, task.description)}
+											>
+												<Edit />
+											</IconButton>
+											<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+										</>
+									)}
+								{editedTask === task.id ? (
 									<>
 										<IconButton
 											color="inherit"
 											sx={{ p: '10px' }}
-											onClick={() => handleEditToggle(task.id, task.description)}
+											onClick={() => handleSaveTask(task.id)}
 										>
-											<Edit />
+											<Save />
+										</IconButton>
+										<IconButton
+											color="inherit"
+											sx={{ p: '10px' }}
+											onClick={handleCloseTask}
+										>
+											<Close />
 										</IconButton>
 										<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
 									</>
+								) : (
+									<>
+										<Checkbox
+											value={task.isCompleted}
+											checked={task.isCompleted}
+											onChange={() => taskCheckHandler(task.id)}
+										/>
+										<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+									</>
 								)}
-							{editedTask === task.id ? (
-								<>
-									<IconButton
-										color="inherit"
-										sx={{ p: '10px' }}
-										onClick={() => handleSaveTask(task.id)}
-									>
-										<Save />
-									</IconButton>
-									<IconButton
-										color="inherit"
-										sx={{ p: '10px' }}
-										onClick={handleCloseTask}
-									>
-										<Close />
-									</IconButton>
-									<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-								</>
-							) : (
-								<>
-									<Checkbox
-										value={task.isCompleted}
-										checked={task.isCompleted}
-										onChange={() => taskCheckHandler(task.id)}
-									/>
-									<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-								</>
-							)}
-							<IconButton color="inherit" sx={{ p: '10px' }} onClick={() => removeTaskHandler(task.id)}>
-								<DeleteForever />
-							</IconButton>
-						</Box>
-					</Paper>
-				</Box>
+								<IconButton color="inherit" sx={{ p: '10px' }} onClick={() => removeTaskHandler(task.id)}>
+									<DeleteForever />
+								</IconButton>
+							</Box>
+						</Paper>
+					</Grid>
+				</Grid>
 			))}
-		</>
+		</Container>
 	)
 }
 

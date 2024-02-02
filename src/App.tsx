@@ -48,7 +48,7 @@ const App: FC = () => {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      flexDirection: 'column'
+      flexDirection: 'column',
     }}
     >
       <Typography variant='h3'>To-do</Typography>
