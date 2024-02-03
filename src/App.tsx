@@ -46,12 +46,21 @@ const App: FC = () => {
   return (
     <Box sx={{
       display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
       flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      background: '#F2E6DE',
+      maxWidth: '50rem', 
+      margin: 'auto',
+      borderRadius: '1.5rem',
+      WebkitBoxShadow: '-20px 20px 0px 0px #d5ae95',
+      border: '1px solid #38332e'
     }}
     >
-      <Typography variant='h3'>To-do</Typography>
+      <Box sx={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+      <Typography fontFamily='Dawning of a New Day' sx={{fontSize: '2.5rem', color: '#38332e'}}>do whatchu gotta do</Typography>
+      <Typography sx={{marginTop: '1rem', color: '#38332e'}}>٩(^ᗜ^ )و ´-</Typography>
+      </Box>
       <TaskInput
         tasks={tasks}
         showErrorMessage={showErrorMessage}

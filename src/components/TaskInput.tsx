@@ -22,7 +22,7 @@ const TaskInput: FC<TasksInputProps> = (props) => {
 	}, [tasks]);
 
 	return (
-		<Container>
+		<Container sx={{ paddingBottom: '3rem' }}>
 			<Grid
 				container
 				sx={{
@@ -32,9 +32,8 @@ const TaskInput: FC<TasksInputProps> = (props) => {
 				<Grid
 					item
 					xs={12}
-					md={6}
 					sx={{
-						marginTop: '3.5rem',
+						marginTop: '11rem',
 						position: "absolute",
 						top: 0,
 						zIndex: 999
@@ -44,7 +43,6 @@ const TaskInput: FC<TasksInputProps> = (props) => {
 				<Grid
 					item
 					xs={12}
-					md={6}
 					sx={{
 						marginBottom: '1rem',
 						paddingTop: '4rem'
@@ -54,11 +52,12 @@ const TaskInput: FC<TasksInputProps> = (props) => {
 							p: '2px 4px',
 							display: 'flex',
 							alignItems: 'center',
+							borderRadius: '1.5rem'
 						}}
 					>
 						<InputBase
-							sx={{ ml: 1, flex: 1 }}
-							placeholder="Add new task"
+							sx={{ ml: 1, flex: 1, fontFamily: 'Gaegu', fontSize: '1.25rem' }}
+							placeholder="Add new task..."
 							value={newTask.description}
 							onChange={(e) =>
 								setNewTask({
@@ -71,8 +70,14 @@ const TaskInput: FC<TasksInputProps> = (props) => {
 							tabIndex={0}
 						/>
 						<IconButton
-							color="inherit"
-							sx={{ p: '10px' }}
+							sx={{
+								p: '10px',
+								color: '#a7dcbc',
+								stroke: '#38332e',
+								strokeWidth: '0.45px',
+								strokeLinecap: 'round',
+								strokeLinejoin: 'round'
+							}}
 							onClick={addTaskHandler}
 						>
 							<AddCircleOutlined />
