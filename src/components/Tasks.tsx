@@ -121,7 +121,8 @@ const Tasks: FC<TasksProps> = (props) => {
 							backgroundColor: editedTask === task.id || hoveredTask === task.id
 								? '#f0f6f9'
 								: '#fff',
-							borderRadius: '1.5rem'
+							borderRadius: '1.5rem',
+              border: '0.5px solid #695c4f'
 						}}
 							onMouseOver={() => handleMouseOver(task.id)}
 							onMouseOut={handleMouseOut}

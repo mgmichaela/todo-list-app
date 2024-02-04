@@ -52,12 +52,13 @@ const TaskInput: FC<TasksInputProps> = (props) => {
 							p: '2px 4px',
 							display: 'flex',
 							alignItems: 'center',
-							borderRadius: '1.5rem'
+							borderRadius: '1.5rem',
+							border: '0.5px solid #695c4f'
 						}}
 					>
 						<InputBase
 							sx={{ ml: 1, flex: 1, fontFamily: 'Gaegu', fontSize: '1.25rem' }}
-							placeholder="Add new task..."
+							placeholder="⟡₊.. add new task ..✎˖ᝰ✧˖°"
 							value={newTask.description}
 							onChange={(e) =>
 								setNewTask({
