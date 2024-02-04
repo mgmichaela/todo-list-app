@@ -1,7 +1,14 @@
-import { Close, DeleteForever, Edit, Save } from "@mui/icons-material";
-import { Box, Checkbox, Container, Divider, Grid, IconButton, Paper, TextField, Typography, styled } from "@mui/material";
+import { Box, Container, Grid, Paper } from "@mui/material";
 import { Dispatch, FC, SetStateAction, useState } from "react"
 import { Task } from "../App";
+import RemoveTaskButton from "../partials/RemoveTaskButton";
+import CheckTask from "../partials/CheckTask";
+import DividingLine from "../partials/DividingLine";
+import SaveTaskButton from "../partials/SaveTaskButton";
+import CloseEditTaskButton from "../partials/CloseEditTaskButton";
+import EditTaskButton from "../partials/EditTaskButton";
+import SingleTask from "./SingleTask";
+
 interface TasksProps {
 	tasks: Task[];
 	setTasks: Dispatch<SetStateAction<Task[]>>;
@@ -13,45 +20,6 @@ const Tasks: FC<TasksProps> = (props) => {
 	const [hoveredTask, setHoveredTask] = useState<string>('');
 	const [editedTask, setEditedTask] = useState<string>('');
 	const [newValue, setNewValue] = useState<string>('');
-
-	const BaseCustomIcon = styled('span')(({ theme }) => ({
-		borderRadius: '100%',
-		width: 20,
-		height: 20,
-		boxShadow:
-			theme.palette.mode === 'dark'
-				? '0 0 0 1px rgb(16 22 26 / 40%)'
-				: 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
-		backgroundImage:
-			theme.palette.mode === 'dark'
-				? 'linear-gradient(180deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,0))'
-				: 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
-		'.Mui-focusVisible &': {
-			outline: '2px auto #c59fa1',
-			outlineOffset: 2,
-		},
-		'input:hover ~ &': {
-			backgroundColor: '#D9C2C0',
-		},
-	}));
-
-	const CheckedCustomIcon = styled(BaseCustomIcon)({
-		backgroundColor: '#c59fa1',
-		backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
-		'&::before': {
-			display: 'block',
-			width: 20,
-			height: 20,
-			backgroundImage:
-				"url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath" +
-				" fill-rule='evenodd' clip-rule='evenodd' d='M12 5c-.28 0-.53.11-.71.29L7 9.59l-2.29-2.3a1.003 " +
-				"1.003 0 00-1.42 1.42l3 3c.18.18.43.29.71.29s.53-.11.71-.29l5-5A1.003 1.003 0 0012 5z' fill='%23fff'/%3E%3C/svg%3E\")",
-			content: '""',
-		},
-		'input:hover ~ &': {
-			backgroundColor: '#a86f72',
-		},
-	});
 
 	const removeTaskHandler = (taskId: string) => {
 		const newTodos = tasks.filter((task) => task.id !== taskId);
@@ -66,20 +34,20 @@ const Tasks: FC<TasksProps> = (props) => {
 		});
 	};
 
-	const handleMouseOver = (taskId: string) => {
+	const mouseOverHandler = (taskId: string) => {
 		setHoveredTask(taskId);
 	};
 
-	const handleMouseOut = () => {
+	const mouseOutHandler = () => {
 		setHoveredTask('');
 	};
 
-	const handleEditToggle = (taskId: string, taskDescription: string) => {
+	const editToggleHandler = (taskId: string, taskDescription: string) => {
 		setNewValue(taskDescription);
 		setEditedTask(taskId === editedTask ? '' : taskId);
 	};
 
-	const handleSaveTask = (taskId: string) => {
+	const saveTaskHandler = (taskId: string) => {
 		setTasks((previousTasks) => {
 			return previousTasks.map((task) =>
 				task.id === taskId ? { ...task, description: newValue } : task
@@ -89,14 +57,9 @@ const Tasks: FC<TasksProps> = (props) => {
 		setEditedTask('');
 	}
 
-	const handleCloseTask = () => {
+	const closeTaskHandler = () => {
 		setEditedTask('');
 	}
-
-	const textFieldStyle = {
-		fontFamily: 'Gaegu',
-		fontSize: '1.25rem'
-	};
 
 	return (
 		<Container>
@@ -122,38 +85,19 @@ const Tasks: FC<TasksProps> = (props) => {
 								? '#f0f6f9'
 								: '#fff',
 							borderRadius: '1.5rem',
-              border: '0.5px solid #695c4f'
+							border: '0.5px solid #695c4f'
 						}}
-							onMouseOver={() => handleMouseOver(task.id)}
-							onMouseOut={handleMouseOut}
+							onMouseOver={() => mouseOverHandler(task.id)}
+							onMouseOut={mouseOutHandler}
 						>
-							{editedTask === task.id ? (
-								<TextField
-									value={newValue}
-									onChange={(e) => setNewValue(e.target.value)}
-									sx={{ "& fieldset": { border: 'none' } }}
-									InputProps={{
-										style: textFieldStyle,
-									}}
-								/>
-							) : (
-								<Typography
-									fontFamily='Gaegu'
-									fontSize='1.25rem'
-									sx={{
-										cursor: 'default',
-										padding: '0.5rem',
-										textDecoration: task.isCompleted
-											? 'line-through'
-											: 'none',
-										opacity: task.isCompleted
-											? 0.35
-											: 1
-									}}
-								>
-									{task.description}
-								</Typography>
-							)}
+							<SingleTask
+								editedTask={editedTask}
+								taskId={task.id}
+								newValue={newValue}
+								setNewValue={setNewValue}
+								taskCompleted={task.isCompleted}
+								taskDescription={task.description}
+							/>
 							<Box sx={{
 								display: 'flex',
 								alignItems: 'center',
@@ -164,75 +108,37 @@ const Tasks: FC<TasksProps> = (props) => {
 									&& (editedTask !== task.id && hoveredTask === task.id)
 									&& (
 										<>
-											<IconButton
-												sx={{
-													p: '10px',
-													color: '#a7c7dc',
-													stroke: '#38332e',
-													strokeWidth: '0.45px',
-													strokeLinecap: 'round',
-													strokeLinejoin: 'round'
-												}}
-												onClick={() => handleEditToggle(task.id, task.description)}
-											>
-												<Edit />
-											</IconButton>
-											<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+											<EditTaskButton
+												editToggleHandler={editToggleHandler}
+												taskId={task.id}
+												taskDescription={task.description}
+											/>
+											<DividingLine />
 										</>
 									)}
 								{editedTask === task.id ? (
 									<>
-										<IconButton
-											sx={{
-												p: '10px',
-												color: '#4c8db7',
-												stroke: '#38332e',
-												strokeWidth: '0.45px',
-												strokeLinecap: 'round',
-												strokeLinejoin: 'round'
-											}}
-											onClick={() => handleSaveTask(task.id)}
-										>
-											<Save />
-										</IconButton>
-										<IconButton
-											sx={{
-												p: '10px',
-												color: '#a7c7dc',
-												stroke: '#38332e',
-												strokeWidth: '0.45px',
-												strokeLinecap: 'round',
-												strokeLinejoin: 'round'
-											}}
-											onClick={handleCloseTask}
-										>
-											<Close />
-										</IconButton>
-										<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+										<SaveTaskButton
+											saveTaskHandler={saveTaskHandler}
+											taskId={task.id}
+										/>
+										<CloseEditTaskButton closeTaskHandler={closeTaskHandler} />
+										<DividingLine />
 									</>
 								) : (
 									<>
-										<Checkbox
-											value={task.isCompleted}
-											checked={task.isCompleted}
-											onChange={() => taskCheckHandler(task.id)}
-											icon={<BaseCustomIcon />}
-											checkedIcon={<CheckedCustomIcon />}
+										<CheckTask
+											taskCompleted={task.isCompleted}
+											taskCheckHandler={taskCheckHandler}
+											taskId={task.id}
 										/>
-										<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+										<DividingLine />
 									</>
 								)}
-								<IconButton sx={{
-									p: '10px',
-									color: '#d5ae95',
-									stroke: '#38332e',
-									strokeWidth: '0.45px',
-									strokeLinecap: 'round',
-									strokeLinejoin: 'round'
-								}}
-									onClick={() => removeTaskHandler(task.id)}>
-									<DeleteForever />
-								</IconButton>
+								<RemoveTaskButton
+									removeTaskHandler={removeTaskHandler}
+									taskId={task.id}
+								/>
 							</Box>
 						</Paper>
 					</Grid>
