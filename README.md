@@ -46,7 +46,7 @@ npm start
 Open your browser and visit `http://localhost:3000` to view the to-do list application.
 
 ## Deployment
-This project has been deployed using [Netlify](https://www.netlify.com/) and is accessible online [here](stellar-genie-b39894.netlify.app/).
+This project has been deployed using [Netlify](https://www.netlify.com/) and is accessible online [here](https://stellar-genie-b39894.netlify.app/).
 
 ## Usage
 - Adding a Task:
